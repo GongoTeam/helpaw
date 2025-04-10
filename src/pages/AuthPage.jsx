@@ -10,9 +10,13 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
 import googleIcon from "../assets/google-icon.png";
 
 const AuthPage = () => {
+  const navigate = useNavigate();
+
   const [isRegistering, setIsRegistering] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +28,7 @@ const AuthPage = () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       console.log("Logged in with Google:", result.user);
+      navigate("/");
     } catch (error) {
       console.error("Google login error:", error.message);
       setError(error.message);
@@ -34,6 +39,7 @@ const AuthPage = () => {
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       console.log("Logged in with Facebook:", result.user);
+      navigate("/");
     } catch (error) {
       console.error("Facebook login error:", error.message);
       setError(error.message);
@@ -67,6 +73,7 @@ const AuthPage = () => {
         );
         await updateProfile(userCredential.user, { displayName: fullName });
         console.log("Registered:", userCredential.user);
+        navigate("/");
       } catch (error) {
         console.error("Registration error:", error.message);
         setError(error.message);
@@ -79,94 +86,12 @@ const AuthPage = () => {
           password,
         );
         console.log("Logged in:", userCredential.user);
+        navigate("/");
       } catch (error) {
         console.error("Login error:", error.message);
         setError(error.message);
       }
     }
-  };
-
-  const styles = {
-    wrapper: {
-      background: "#f4f4f4",
-      minHeight: "100vh",
-      fontFamily: "sans-serif",
-      display: "flex",
-      flexDirection: "column",
-    },
-    header: {
-      backgroundColor: "#648f5d",
-      padding: "1rem",
-      color: "white",
-      fontWeight: "bold",
-      fontSize: "20px",
-    },
-    container: {
-      maxWidth: "400px",
-      width: "90%",
-      margin: "auto",
-      marginTop: "2rem",
-      textAlign: "center",
-    },
-    input: {
-      width: "100%",
-      padding: "10px",
-      margin: "10px 0",
-      border: "2px solid #648f5d",
-      borderRadius: "6px",
-      fontSize: "14px",
-    },
-    button: {
-      width: "100%",
-      padding: "12px",
-      backgroundColor: "#648f5d",
-      color: "white",
-      border: "none",
-      borderRadius: "25px",
-      marginBottom: "15px",
-      fontWeight: "bold",
-      cursor: "pointer",
-      fontSize: "15px",
-    },
-    switchMode: {
-      color: "#648f5d",
-      fontWeight: "bold",
-      cursor: "pointer",
-      marginTop: "10px",
-      fontSize: "14px",
-    },
-    divider: {
-      height: "1px",
-      background: "#ccc",
-      width: "100%",
-      margin: "20px 0",
-    },
-    social: {
-      width: "100%",
-      padding: "10px",
-      marginBottom: "10px",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: "10px",
-      border: "1px solid #333",
-      borderRadius: "6px",
-      backgroundColor: "#fff",
-      cursor: "pointer",
-      fontSize: "14px",
-    },
-    icon: {
-      width: "20px",
-      height: "20px",
-    },
-    logo: {
-      marginLeft: "10px",
-    },
-    error: {
-      color: "red",
-      marginBottom: "10px",
-      fontSize: "14px",
-    },
   };
 
   return (
@@ -254,3 +179,86 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+
+const styles = {
+  wrapper: {
+    background: "#f4f4f4",
+    minHeight: "100vh",
+    fontFamily: "sans-serif",
+    display: "flex",
+    flexDirection: "column",
+  },
+  header: {
+    backgroundColor: "#648f5d",
+    padding: "1rem",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: "20px",
+  },
+  container: {
+    maxWidth: "400px",
+    width: "90%",
+    margin: "auto",
+    marginTop: "2rem",
+    textAlign: "center",
+  },
+  input: {
+    width: "90%",
+    padding: "10px",
+    margin: "10px 0",
+    border: "2px solid #648f5d",
+    borderRadius: "6px",
+    fontSize: "14px",
+  },
+  button: {
+    width: "100%",
+    padding: "12px",
+    backgroundColor: "#648f5d",
+    color: "white",
+    border: "none",
+    borderRadius: "25px",
+    marginBottom: "15px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    fontSize: "15px",
+  },
+  switchMode: {
+    color: "#648f5d",
+    fontWeight: "bold",
+    cursor: "pointer",
+    marginTop: "10px",
+    fontSize: "14px",
+  },
+  divider: {
+    height: "1px",
+    background: "#ccc",
+    width: "100%",
+    margin: "20px 0",
+  },
+  social: {
+    width: "100%",
+    padding: "10px",
+    marginBottom: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "10px",
+    border: "1px solid #333",
+    borderRadius: "6px",
+    backgroundColor: "#fff",
+    cursor: "pointer",
+    fontSize: "14px",
+  },
+  icon: {
+    width: "20px",
+    height: "20px",
+  },
+  logo: {
+    marginLeft: "10px",
+  },
+  error: {
+    color: "red",
+    marginBottom: "10px",
+    fontSize: "14px",
+  },
+};

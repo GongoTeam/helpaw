@@ -12,7 +12,7 @@ import Donate from "./pages/Donate";
 import Raffles from "./pages/Raffles";
 import ShelterRatings from "./pages/ShelterRatings";
 import PetStories from "./pages/PetStories";
-import Footer from "./components/Footer";
+
 import AuthPage from "./pages/AuthPage";
 
 function App() {
@@ -34,7 +34,6 @@ function App() {
         <Route path="/ratings" element={<ShelterRatings />} />
         <Route path="/stories" element={<PetStories />} />
       </Routes>
-      <Footer />
     </Router>
   );
 }
