@@ -1,7 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import CreateListing from "./pages/CreateListing";
 import AnimalCard from "./pages/AnimalCard";
@@ -14,17 +12,15 @@ import Donate from "./pages/Donate";
 import Raffles from "./pages/Raffles";
 import ShelterRatings from "./pages/ShelterRatings";
 import PetStories from "./pages/PetStories";
-import Header from "./components/Header";
 import Footer from "./components/Footer";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
     <Router>
-      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-listing" element={<CreateListing />} />
         <Route path="/animal/:id" element={<AnimalCard />} />
