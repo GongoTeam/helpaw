@@ -1,6 +1,6 @@
 # Auth Service
 
-Мікросервіс для аутентифікації користувачів на платформі -----------. Підтримує реєстрацію, логін та видачу JWT-токенів.
+Мікросервіс для аутентифікації користувачів на платформі HelPaw. Підтримує реєстрацію, логін та видачу JWT-токенів.
 
 ---
 
@@ -18,13 +18,13 @@
 ## 🚀 Швидкий старт (з GitHub)
 
 ```bash
-git clone https://github.com/your-username/hackathon2025.git
-cd hackathon2025
+git clone https://github.com/GongoTeam/helpaw.git
+cd helpaw/backend
 cp .env.example .env
 ./dev.sh
 ```
 
-> ⚠️ Перед запуском переконайся, що у тебе встановлено Docker + Docker Compose
+> ⚠️ Для запуску потрібен Docker + Docker Compose
 
 ---
 
@@ -49,7 +49,8 @@ AUTH_DB_PORT=5432
 ```json
 {
   "email": "user@example.com",
-  "password": "string"
+  "password": "string",
+  "role":"Volunteer"
 }
 ```
 
