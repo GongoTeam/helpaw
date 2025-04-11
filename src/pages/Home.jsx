@@ -1,212 +1,188 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 
-const allCats = new Array(9).fill({
-  name: "Tosdado",
-  age: "1 year",
-  img: "https://i.ibb.co/NrRz4z8/cat.png",
-});
-
-const App = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showProfile, setShowProfile] = useState(false);
-  const searchInputRef = useRef(null);
-
-  const filteredCats = allCats.filter((cat) =>
-    cat.name.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
-
-  const styles = {
-    page: {
-      display: "flex",
-      flexDirection: "column",
-      backgroundColor: "#f6f6f6",
-      fontFamily: "Arial, sans-serif",
-      height: "100vh",
-      overflow: "hidden",
-    },
-    topBar: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      padding: "10px 20px",
-      borderBottom: "1px solid #ccc",
-      backgroundColor: "#f6f6f6",
-    },
-    logo: {
-      color: "green",
-      fontWeight: "bold",
-      fontSize: "18px",
-    },
-    search: {
-      flex: 1,
-      margin: "0 20px",
-      padding: "6px 10px",
-      border: "1px solid green",
-      borderRadius: "5px",
-    },
-    iconGroup: {
-      display: "flex",
-      gap: "14px",
-      alignItems: "center",
-      cursor: "pointer",
-    },
-    icon: {
-      width: "24px",
-      height: "24px",
-      fill: "#666",
-      transition: "fill 0.2s ease",
-    },
-    iconHover: {
-      fill: "#222",
-    },
-    main: {
-      display: "flex",
-      flex: 1,
-    },
-    sidebar: {
-      width: "200px",
-      border: "2px solid green",
-      margin: "10px",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    lines: {
-      width: "40px",
-      height: "2px",
-      backgroundColor: "black",
-      margin: "6px 0",
-    },
-    content: {
-      flex: 1,
-      padding: "20px",
-      overflowY: "auto",
-    },
-    grid: {
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: "20px",
-      justifyItems: "center",
-    },
-    card: {
-      backgroundColor: "#fff",
-      border: "1px solid #999",
-      borderRadius: "10px",
-      width: "150px",
-      padding: "10px",
-      textAlign: "center",
-      boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
-    },
-    img: {
-      width: "100%",
-      height: "auto",
-      borderRadius: "6px",
-    },
-    name: {
-      fontWeight: "bold",
-      marginTop: "8px",
-    },
-    age: {
-      fontSize: "13px",
-      color: "#666",
-    },
-    modal: {
-      position: "fixed",
-      top: "30%",
-      left: "50%",
-      transform: "translate(-50%, -30%)",
-      backgroundColor: "#fff",
-      border: "1px solid #ccc",
-      padding: "20px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
-      zIndex: 1000,
-    },
-    modalOverlay: {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0,0,0,0.3)",
-      zIndex: 999,
-    },
-  };
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div style={styles.page}>
-      {/* Top bar */}
-      <div style={styles.topBar}>
-        <div style={styles.logo}>HelPaw</div>
-        <input
-          type="text"
-          placeholder="search"
-          style={styles.search}
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          ref={searchInputRef}
-        />
-        <div style={styles.iconGroup}>
-          {/* Search Icon */}
-          <svg
-            onClick={() => searchInputRef.current?.focus()}
-            xmlns="http://www.w3.org/2000/svg"
-            style={styles.icon}
-            viewBox="0 0 24 24"
+      <header style={styles.header}>
+        <div style={styles.headerRow}>
+          <h1 style={styles.logoText}>HelPaw</h1>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={styles.burger}
+            className="burger"
           >
-            <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C8.01 14 6 11.99 6 9.5S8.01 5 10.5 5 15 7.01 15 9.5 12.99 14 10.5 14z" />
-          </svg>
-
-          {/* Profile Icon */}
-          <svg
-            onClick={() => setShowProfile(true)}
-            xmlns="http://www.w3.org/2000/svg"
-            style={styles.icon}
-            viewBox="0 0 24 24"
-          >
-            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8V21h19.2v-1.8c0-3.2-6.4-4.8-9.6-4.8z" />
-          </svg>
+            ☰
+          </button>
         </div>
-      </div>
+        <nav style={styles.nav} className={menuOpen ? "nav" : "nav navClosed"}>
+          <a href="#" style={styles.navLink}>
+            Головна
+          </a>
+          <a href="#" style={styles.navLink}>
+            Новини/блог
+          </a>
+          <a href="#" style={styles.navLink}>
+            Тварини
+          </a>
+          <a href="#" style={styles.navLink}>
+            Притулки
+          </a>
+          <a href="#" style={styles.navLink}>
+            Волонтерам
+          </a>
+          <a href="#" style={styles.navLink}>
+            Вхід/Реєстрація
+          </a>
+        </nav>
+      </header>
 
-      {/* Sidebar & content */}
-      <div style={styles.main}>
-        <aside style={styles.sidebar}>
-          <div style={styles.lines}></div>
-          <div style={styles.lines}></div>
-          <div style={styles.lines}></div>
-        </aside>
+      <main style={styles.main}>
+        <h2 style={styles.headline}>
+          ВОНА ЧЕКАЄ НА ДІМ,
+          <br />
+          МОЖЛИВО, <span style={styles.highlight}>ТВІЙ?</span>
+        </h2>
+        <p style={styles.subtitle}>
+          Ти можеш допомогти знайти дім для безпритульної тварини, або стати
+          волонтером.
+        </p>
 
-        <div style={styles.content}>
-          <div style={styles.grid}>
-            {filteredCats.map((cat, index) => (
-              <div key={index} style={styles.card}>
-                <img src={cat.img} alt={cat.name} style={styles.img} />
-                <div style={styles.name}>{cat.name}</div>
-                <div style={styles.age}>{cat.age}</div>
-              </div>
-            ))}
-          </div>
+        <div style={styles.buttons}>
+          <button style={styles.button}>Стати волонтером</button>
+          <button style={styles.button}>Пошук тварин</button>
+          <button style={styles.button}>Допомогти притулку</button>
         </div>
-      </div>
+      </main>
 
-      {/* Modal profile */}
-      {showProfile && (
-        <>
-          <div
-            style={styles.modalOverlay}
-            onClick={() => setShowProfile(false)}
-          />
-          <div style={styles.modal}>
-            <h3>👤 Профіль</h3>
-            <p>Тут буде інформація про користувача.</p>
-            <button onClick={() => setShowProfile(false)}>Закрити</button>
-          </div>
-        </>
-      )}
+      <style>{`
+        @media (max-width: 768px) {
+          .burger {
+            display: block;
+          }
+          .nav {
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+          }
+          .navClosed {
+            display: none !important;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .burger {
+            display: none;
+          }
+          .nav {
+            display: flex !important;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            margin-top: 0;
+          }
+          .navClosed {
+            display: flex !important;
+          }
+        }
+      `}</style>
     </div>
   );
-};
+}
 
-export default App;
+const styles = {
+  page: {
+    minHeight: "100vh",
+    backgroundImage: "url('/assets/MainBG.jpeg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    color: "white",
+    fontFamily: "Arial, sans-serif",
+    display: "flex",
+    flexDirection: "column",
+  },
+  header: {
+    backgroundColor: "rgba(30, 30, 30, 0.85)",
+    padding: "20px",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+  },
+  headerRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+  },
+  logoText: {
+    margin: 0,
+    fontWeight: 300,
+    fontSize: "24px",
+    marginLeft: "15px",
+  },
+  burger: {
+    background: "none",
+    border: "none",
+    color: "white",
+    fontSize: "28px",
+    cursor: "pointer",
+    marginLeft: "165px",
+  },
+  nav: {
+    display: "flex",
+    gap: "50px",
+    marginRight: "40px",
+    flexWrap: "wrap",
+    alignItems: "center",
+  },
+  navLink: {
+    color: "white",
+    textDecoration: "none",
+    fontSize: "16px",
+  },
+  main: {
+    flexGrow: 1,
+    padding: "60px 20px",
+    textAlign: "center",
+    backgroundColor: "rgba(40, 40, 40, 0.6)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  headline: {
+    fontSize: "calc(28px + 1.5vw)",
+    fontWeight: "bold",
+    lineHeight: "1.3",
+    marginBottom: "20px",
+  },
+  highlight: {
+    color: "#A8D5BA",
+  },
+  subtitle: {
+    fontSize: "18px",
+    maxWidth: "600px",
+    margin: "0 auto 30px",
+    color: "#ccc",
+  },
+  buttons: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "45px",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+  button: {
+    padding: "12px 24px",
+    fontSize: "16px",
+    backgroundColor: "#76b893",
+    color: "white",
+    border: "none",
+    borderRadius: "10px",
+    cursor: "pointer",
+    minWidth: "200px",
+  },
+};

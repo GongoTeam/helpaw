@@ -1,10 +1,14 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
-import CreateListing from "./pages/CreateListing";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import CreateAd from "./pages/CreateAd";
 import AnimalCard from "./pages/AnimalCard";
-import Search from "./pages/Search";
 import Shelter from "./pages/Shelter";
+import Search from "./pages/Search";
 import RequestForm from "./pages/RequestForm";
 import FoundAnimal from "./pages/FoundAnimal";
 import News from "./pages/News";
@@ -13,19 +17,18 @@ import Raffles from "./pages/Raffles";
 import ShelterRatings from "./pages/ShelterRatings";
 import PetStories from "./pages/PetStories";
 
-import AuthPage from "./pages/AuthPage";
-
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<AuthPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create-listing" element={<CreateListing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/create-ad" element={<CreateAd />} />
         <Route path="/animal/:id" element={<AnimalCard />} />
-        <Route path="/search" element={<Search />} />
         <Route path="/shelter/:id" element={<Shelter />} />
+        <Route path="/search" element={<Search />} />
         <Route path="/request" element={<RequestForm />} />
         <Route path="/found" element={<FoundAnimal />} />
         <Route path="/news" element={<News />} />
