@@ -26,6 +26,7 @@ const DonationForm = () => {
       display: "flex",
       justifyContent: "space-around",
       marginTop: "30px",
+      gap: "15px",
     },
     section: {
       border: "1px solid #94b49f",

@@ -113,6 +113,7 @@ const styles = {
   },
   header: {
     backgroundColor: "rgba(30, 30, 30, 0.85)",
+    fontFamily: "'PT Sans', sans-serif",
     padding: "20px",
     display: "flex",
     flexDirection: "row",
