@@ -5,7 +5,8 @@ export default function About() {
     <section style={styles.section}>
       <div style={styles.container}>
         <h2 style={styles.title}>
-          ПРО ПЛАТФОРМУ <span style={styles.paw}>🐾</span>
+          ПРО ПЛАТФОРМУ{" "}
+          <img src="/assets/paw.png" alt="Paw" style={styles.pawImage} />
         </h2>
         <div style={styles.content}>
           {/* Ліва колонка */}
@@ -150,5 +151,12 @@ const styles = {
     fontWeight: "bold",
     marginRight: "10px",
     fontSize: "30px",
+  },
+  pawImage: {
+    width: "30px",
+    height: "30px",
+    margin: "0 8px",
+    verticalAlign: "top",
+    transform: "rotate(10deg)",
   },
 };

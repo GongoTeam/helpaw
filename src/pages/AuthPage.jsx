@@ -12,8 +12,6 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-import googleIcon from "../assets/google-icon.png";
-
 const AuthPage = () => {
   const navigate = useNavigate();
 
@@ -161,7 +159,11 @@ const AuthPage = () => {
         <div style={styles.divider}></div>
 
         <button style={styles.social} onClick={handleGoogleLogin}>
-          <img src={googleIcon} alt="Google" style={styles.icon} />
+          <img
+            src={"/assets/google-icon.png"}
+            alt="Google"
+            style={styles.icon}
+          />
           Continue with Google
         </button>
 

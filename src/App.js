@@ -16,14 +16,14 @@ import Donate from "./pages/Donate";
 import Raffles from "./pages/Raffles";
 import ShelterRatings from "./pages/ShelterRatings";
 import PetStories from "./pages/PetStories";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/create-ad" element={<CreateAd />} />
         <Route path="/animal/:id" element={<AnimalCard />} />

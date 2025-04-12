@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div style={styles.page}>
@@ -17,22 +19,22 @@ export default function Header() {
           </button>
         </div>
         <nav style={styles.nav} className={menuOpen ? "nav" : "nav navClosed"}>
-          <a href="#" style={styles.navLink}>
+          <a href="/" style={styles.navLink}>
             Головна
           </a>
-          <a href="#" style={styles.navLink}>
+          <a href="/news" style={styles.navLink}>
             Новини/блог
           </a>
-          <a href="#" style={styles.navLink}>
+          <a href="/search" style={styles.navLink}>
             Тварини
           </a>
-          <a href="#" style={styles.navLink}>
+          <a href="/shelter/:id" style={styles.navLink}>
             Притулки
           </a>
-          <a href="#" style={styles.navLink}>
+          <a href="/volunteers" style={styles.navLink}>
             Волонтерам
           </a>
-          <a href="#" style={styles.navLink}>
+          <a href="Auth" style={styles.navLink}>
             Вхід/Реєстрація
           </a>
         </nav>
@@ -49,9 +51,15 @@ export default function Header() {
           волонтером.
         </p>
         <div style={styles.buttons}>
-          <button style={styles.button}>Стати волонтером</button>
-          <button style={styles.button}>Пошук тварин</button>
-          <button style={styles.button}>Допомогти притулку</button>
+          <button style={styles.button} onClick={() => navigate("/volunteers")}>
+            Стати волонтером
+          </button>
+          <button style={styles.button} onClick={() => navigate("/search")}>
+            Пошук тварин
+          </button>
+          <button style={styles.button} onClick={() => navigate("/donate")}>
+            Допомогти притулку
+          </button>
         </div>
       </main>
 

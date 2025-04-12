@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   container: {
@@ -59,12 +60,21 @@ const styles = {
     color: "#000",
     marginBottom: "8px",
   },
-  howToText: {
-    fontSize: "20px",
-    fontWeight: "bold",
+  howTo: {
+    fontSize: "18px",
     color: "white",
-    margin: "24px 0",
+    fontWeight: "bold",
   },
+  list: {
+    textAlign: "left",
+    listStyleType: "none",
+    color: "#000",
+    fontSize: "14px",
+    lineHeight: "1.6",
+    paddingLeft: "65px",
+    marginBottom: "30px",
+  },
+
   button: {
     backgroundColor: "#6a9c86",
     color: "white",
@@ -74,9 +84,16 @@ const styles = {
     borderRadius: "6px",
     cursor: "pointer",
   },
+  number: {
+    color: "#76b893",
+    fontWeight: "bold",
+    marginRight: "10px",
+    fontSize: "18px",
+  },
 };
 
 const ContestComponent = () => {
+  const navigate = useNavigate();
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>
@@ -106,8 +123,24 @@ const ContestComponent = () => {
             Набір для улюбленця: миска, іграшка, корм
           </div>
           <div style={styles.prizeText}>Термін участі: до 30 квітня</div>
-          <div style={styles.howToText}>ЯК ВЗЯТИ УЧАСТЬ:</div>
-          <button style={styles.button}>Взяти участь</button>
+          <div style={styles.howTo}>ЯК ВЗЯТИ УЧАСТЬ:</div>
+          <ul style={styles.list}>
+            <li>
+              {" "}
+              <span style={styles.number}>01</span> Зроби донат або допоможи
+            </li>
+            <li>
+              {" "}
+              <span style={styles.number}>02</span>Поширюй інформацію
+            </li>
+            <li>
+              {" "}
+              <span style={styles.number}>03</span> Заповни форму участі
+            </li>
+          </ul>
+          <button style={styles.button} onClick={() => navigate("/raffles")}>
+            Взяти участь
+          </button>
         </div>
 
         <img

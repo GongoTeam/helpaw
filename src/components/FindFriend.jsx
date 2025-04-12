@@ -81,6 +81,13 @@ const FindFriend = () => {
       width: "300px",
       height: "600px",
     },
+    pawImage: {
+      width: "30px",
+      height: "30px",
+      margin: "0 8px",
+      verticalAlign: "top",
+      transform: "rotate(10deg)",
+    },
     label: {
       display: "block",
       marginBottom: "6px",
@@ -117,7 +124,8 @@ const FindFriend = () => {
   return (
     <>
       <h2 style={styles.title}>
-        ЗНАЙДІТЬ СВОГО ДРУГА <span style={styles.paw}>🐾</span>
+        ЗНАЙДІТЬ СВОГО ДРУГА{" "}
+        <img src="/assets/paw.png" alt="Paw" style={styles.pawImage} />
       </h2>
       <div style={styles.container}>
         <form style={styles.formBox} onSubmit={handleSubmit}>

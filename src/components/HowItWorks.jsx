@@ -82,12 +82,20 @@ const HowItWorks = () => {
       color: "#999",
       margin: "0 10px",
     },
+    pawImage: {
+      width: "30px",
+      height: "30px",
+      margin: "0 8px",
+      verticalAlign: "top",
+      transform: "rotate(10deg)",
+    },
   };
 
   return (
     <section style={styles.section}>
       <h2 style={styles.title}>
-        ЯК ЦЕ ПРАЦЮЄ?<span style={styles.paw}>🐾</span>
+        ЯК ЦЕ ПРАЦЮЄ?
+        <img src="/assets/paw.png" alt="Paw" style={styles.pawImage} />
       </h2>
 
       <div style={styles.stepsWrapper}>
