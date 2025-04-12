@@ -248,7 +248,7 @@ const News = () => {
           <a href="/search" style={styles.navLink}>
             Тварини
           </a>
-          <a href="/shelter/:id" style={styles.navLink}>
+          <a href="/shelters" style={styles.navLink}>
             Притулки
           </a>
           <a href="/volunteers" style={styles.navLink}>

@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  auth,
-  googleProvider,
-  facebookProvider,
-  signInWithPopup,
-} from "../firebase/firebase";
+import { auth, googleProvider, signInWithPopup } from "../firebase/firebase";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -16,6 +11,9 @@ const AuthPage = () => {
   const navigate = useNavigate();
 
   const [isRegistering, setIsRegistering] = useState(false);
+  const [showRoleSelect, setShowRoleSelect] = useState(true);
+  const [role, setRole] = useState(null);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -33,35 +31,20 @@ const AuthPage = () => {
     }
   };
 
-  const handleFacebookLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, facebookProvider);
-      console.log("Logged in with Facebook:", result.user);
-      navigate("/");
-    } catch (error) {
-      console.error("Facebook login error:", error.message);
-      setError(error.message);
-    }
-  };
-
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   const handleEmailAuth = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!validateEmail(email)) {
-      return setError("Invalid email format");
-    }
-
-    if (password.length < 6) {
-      return setError("Password must be at least 6 characters");
-    }
+    if (!validateEmail(email)) return setError("Невірний формат email");
+    if (password.length < 6)
+      return setError("Пароль має містити щонайменше 6 символів");
 
     if (isRegistering) {
-      if (!fullName.trim()) return setError("Full name is required");
+      if (!fullName.trim()) return setError("ПІБ обовʼязкове");
       if (password !== confirmPassword)
-        return setError("Passwords do not match");
+        return setError("Паролі не співпадають");
 
       try {
         const userCredential = await createUserWithEmailAndPassword(
@@ -69,8 +52,10 @@ const AuthPage = () => {
           email,
           password,
         );
-        await updateProfile(userCredential.user, { displayName: fullName });
-        console.log("Registered:", userCredential.user);
+        await updateProfile(userCredential.user, {
+          displayName: fullName,
+        });
+        console.log("Зареєстровано:", userCredential.user, "Роль:", role);
         navigate("/");
       } catch (error) {
         console.error("Registration error:", error.message);
@@ -92,116 +77,145 @@ const AuthPage = () => {
     }
   };
 
+  const handleRoleSelection = (selectedRole) => {
+    setRole(selectedRole);
+    setShowRoleSelect(false);
+    setIsRegistering(true);
+  };
+
   return (
     <div style={styles.wrapper}>
-      <div style={styles.header}>
-        <span style={styles.logo}>HelPaw</span>
-      </div>
-      <div style={styles.container}>
-        <h2>{isRegistering ? "Sign Up" : "Sign In"}</h2>
+      {showRoleSelect ? (
+        <div style={styles.roleBox}>
+          <h2 style={styles.roleTitle}>ХТО ТИ?</h2>
+          <div style={styles.roleButtons}>
+            <button
+              style={styles.roleButton}
+              onClick={() => handleRoleSelection("volunteer")}
+            >
+              ВОЛОНТЕР
+            </button>
+            <button
+              style={styles.roleButton}
+              onClick={() => handleRoleSelection("shelter")}
+            >
+              ПРИТУЛОК
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div style={styles.container}>
+          <h2>{isRegistering ? "Реєстрація" : "Вхід"}</h2>
 
-        {error && <div style={styles.error}>{error}</div>}
+          {error && <div style={styles.error}>{error}</div>}
 
-        <form onSubmit={handleEmailAuth}>
-          {isRegistering && (
+          <form onSubmit={handleEmailAuth}>
+            {isRegistering && (
+              <input
+                type="text"
+                placeholder="ПІБ / Назва"
+                style={styles.input}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            )}
             <input
-              type="text"
-              placeholder="Full Name"
+              type="email"
+              placeholder="Email"
               style={styles.input}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
-          )}
-
-          <input
-            type="email"
-            placeholder="Email"
-            style={styles.input}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            style={styles.input}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          {isRegistering && (
             <input
               type="password"
-              placeholder="Confirm Password"
+              placeholder="Пароль"
               style={styles.input}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
+            {isRegistering && (
+              <input
+                type="password"
+                placeholder="Підтвердити пароль"
+                style={styles.input}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            )}
+
+            <button type="submit" style={styles.button}>
+              {isRegistering ? "Зареєструватися" : "Увійти"}
+            </button>
+          </form>
+
+          {!isRegistering && (
+            <>
+              <div style={styles.divider}></div>
+
+              <button style={styles.social} onClick={handleGoogleLogin}>
+                <img
+                  src={"/assets/google-icon.png"}
+                  alt="Google"
+                  style={styles.icon}
+                />
+                Продовжити з Google
+              </button>
+            </>
           )}
 
-          <button style={styles.button} type="submit">
-            {isRegistering ? "Create Account" : "Continue"}
-          </button>
-        </form>
-
-        <div
-          style={styles.switchMode}
-          onClick={() => {
-            setIsRegistering(!isRegistering);
-            setError("");
-          }}
-        >
-          {isRegistering
-            ? "Already have an account? Sign in"
-            : "Don't have an account? Sign Up"}
+          <div
+            style={styles.switchMode}
+            onClick={() => {
+              if (isRegistering) {
+                setIsRegistering(false);
+                setShowRoleSelect(false);
+              } else {
+                setShowRoleSelect(true);
+                setIsRegistering(true);
+              }
+              setError("");
+            }}
+          >
+            {isRegistering
+              ? "Вже маєш акаунт? Увійти"
+              : "Не маєш акаунту? Реєстрація"}
+          </div>
         </div>
-
-        <div style={styles.divider}></div>
-
-        <button style={styles.social} onClick={handleGoogleLogin}>
-          <img
-            src={"/assets/google-icon.png"}
-            alt="Google"
-            style={styles.icon}
-          />
-          Continue with Google
-        </button>
-
-        <button style={styles.social} onClick={handleFacebookLogin}>
-          <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
-            alt="Facebook"
-            style={styles.icon}
-          />
-          Continue with Facebook
-        </button>
-      </div>
+      )}
     </div>
   );
 };
 
 export default AuthPage;
-
 const styles = {
   wrapper: {
     background: "#f4f4f4",
     minHeight: "100vh",
     fontFamily: "sans-serif",
     display: "flex",
-    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  header: {
-    backgroundColor: "#648f5d",
-    padding: "1rem",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "20px",
+  roleBox: {
+    textAlign: "center",
+    background: "white",
+    padding: "40px",
+    borderRadius: "10px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+  },
+  roleButtons: {
+    display: "flex",
+    justifyContent: "center",
+    gap: "20px",
+    marginTop: "20px",
   },
   container: {
+    width: "100%",
     maxWidth: "400px",
-    width: "90%",
-    margin: "auto",
-    marginTop: "2rem",
+    backgroundColor: "white",
+    padding: "30px",
+    borderRadius: "10px",
+    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
     textAlign: "center",
   },
   input: {
@@ -255,12 +269,41 @@ const styles = {
     width: "20px",
     height: "20px",
   },
-  logo: {
-    marginLeft: "10px",
-  },
   error: {
     color: "red",
     marginBottom: "10px",
     fontSize: "14px",
+  },
+  roleBox: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100vh",
+    backgroundColor: "#f4f4f4",
+    gap: "30px",
+  },
+
+  roleTitle: {
+    fontSize: "24px",
+    fontWeight: "bold",
+    color: "#333",
+  },
+
+  roleButtons: {
+    display: "flex",
+    gap: "20px",
+  },
+
+  roleButton: {
+    padding: "15px 30px",
+    border: "2px solid #648f5d",
+    backgroundColor: "#fff",
+    color: "#333",
+    fontWeight: "bold",
+    fontSize: "14px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    transition: "0.3s",
   },
 };
