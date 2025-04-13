@@ -16,9 +16,12 @@ const EditProfile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5001/api/user/profile", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          "https://backendhelppaw-production.up.railway.app/api/user/profile",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
         const { fullName, email, city } = res.data;
         setFormData({ fullName, email, city });
       } catch (err) {

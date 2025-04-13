@@ -33,11 +33,14 @@ const AuthPage = () => {
 
         await createUserWithEmailAndPassword(auth, email, password);
 
-        await axios.post("http://localhost:5001/api/auth/register", {
-          email,
-          password,
-          role,
-        });
+        await axios.post(
+          "https://backendhelppaw-production.up.railway.app/api/auth/register",
+          {
+            email,
+            password,
+            role,
+          },
+        );
 
         setIsRegistering(false);
         setShowRoleSelect(false);
@@ -52,10 +55,13 @@ const AuthPage = () => {
         password,
       );
 
-      const res = await axios.post("http://localhost:5001/api/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "https://backendhelppaw-production.up.railway.app/api/auth/login",
+        {
+          email,
+          password,
+        },
+      );
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);

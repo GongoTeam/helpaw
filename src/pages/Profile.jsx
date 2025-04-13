@@ -11,11 +11,14 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:5001/api/user/profile", {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const res = await axios.get(
+          "https://backendhelppaw-production.up.railway.app/api/user/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
         setUserData(res.data);
       } catch (err) {
         setError("Не вдалося завантажити дані профілю");
