@@ -1,6 +1,7 @@
 using HelPaw.Application.Interfaces;
 using HelPaw.Application.Services;
 using HelPaw.Infrastructure.Data;
+using HelPaw.WebAPI.Hubs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -12,8 +13,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 
+// DI
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAnimalService, AnimalService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IShelterRequestService, ShelterRequestService>();
+builder.Services.AddScoped<IFavoriteAnimalService, FavoriteAnimalService>();
+builder.Services.AddScoped<IAnimalRequestService, AnimalRequestService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
 
 // DB
@@ -37,11 +46,20 @@ builder.Services.AddAuthentication("Bearer")
 
 var app = builder.Build();
 
-
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
-app.UseAuthentication();
+
+app.UseRouting(); // 👉 routing first
+app.UseAuthentication(); // 👉 auth middleware must be between routing and endpoints
 app.UseAuthorization();
+
+// 👇 top-level route mapping
 app.MapControllers();
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
