@@ -16,6 +16,7 @@ import AuthPage from "./pages/AuthPage";
 import Volunteers from "./pages/Volunteers";
 import EditProfile from "./pages/EditProfile";
 import UserActivity from "./pages/UserActivity";
+import ChatWidget from "./components/ChatWidget";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/raffles" element={<Raffles />} />
         <Route path="/stories" element={<PetStories />} />
       </Routes>
+      <ChatWidget />
     </Router>
   );
 }
