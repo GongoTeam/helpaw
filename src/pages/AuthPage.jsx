@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { auth, googleProvider, signInWithPopup } from "../firebase/firebase";
 import {
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  updateProfile,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -16,20 +16,7 @@ const AuthPage = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [fullName, setFullName] = useState("");
   const [error, setError] = useState("");
-
-  const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      console.log("Logged in with Google:", result.user);
-      navigate("/");
-    } catch (error) {
-      console.error("Google login error:", error.message);
-      setError(error.message);
-    }
-  };
 
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
@@ -38,42 +25,54 @@ const AuthPage = () => {
     setError("");
 
     if (!validateEmail(email)) return setError("Невірний формат email");
-    if (password.length < 6)
-      return setError("Пароль має містити щонайменше 6 символів");
+    if (password.length < 6) return setError("Мінімум 6 символів у паролі");
 
     if (isRegistering) {
-      if (!fullName.trim()) return setError("ПІБ обовʼязкове");
-      if (password !== confirmPassword)
-        return setError("Паролі не співпадають");
+      if (!role) return setError("Оберіть роль");
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
+        await createUserWithEmailAndPassword(auth, email, password);
+
+        await axios.post("http://localhost:5001/api/auth/register", {
           email,
           password,
-        );
-        await updateProfile(userCredential.user, {
-          displayName: fullName,
+          role,
         });
-        console.log("Зареєстровано:", userCredential.user, "Роль:", role);
-        navigate("/");
-      } catch (error) {
-        console.error("Registration error:", error.message);
-        setError(error.message);
+
+        // Після реєстрації — перехід до форми входу
+        setIsRegistering(false);
+        setShowRoleSelect(false);
+        setEmail("");
+        setPassword("");
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
       }
     } else {
       try {
-        const userCredential = await signInWithEmailAndPassword(
-          auth,
+        await signInWithEmailAndPassword(auth, email, password);
+
+        const res = await axios.post("http://localhost:5001/api/auth/login", {
           email,
           password,
-        );
-        console.log("Logged in:", userCredential.user);
-        navigate("/");
-      } catch (error) {
-        console.error("Login error:", error.message);
-        setError(error.message);
+        });
+
+        localStorage.setItem("token", res.data.token);
+
+        // Після входу — перехід на профіль
+        navigate("/profile");
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
       }
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      console.log("Google user:", result.user);
+      navigate("/profile");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -91,13 +90,13 @@ const AuthPage = () => {
           <div style={styles.roleButtons}>
             <button
               style={styles.roleButton}
-              onClick={() => handleRoleSelection("volunteer")}
+              onClick={() => handleRoleSelection("Volunteer")}
             >
               ВОЛОНТЕР
             </button>
             <button
               style={styles.roleButton}
-              onClick={() => handleRoleSelection("shelter")}
+              onClick={() => handleRoleSelection("Shelter")}
             >
               ПРИТУЛОК
             </button>
@@ -106,43 +105,23 @@ const AuthPage = () => {
       ) : (
         <div style={styles.container}>
           <h2>{isRegistering ? "Реєстрація" : "Вхід"}</h2>
-
           {error && <div style={styles.error}>{error}</div>}
 
           <form onSubmit={handleEmailAuth}>
-            {isRegistering && (
-              <input
-                type="text"
-                placeholder="ПІБ / Назва"
-                style={styles.input}
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
-            )}
             <input
               type="email"
               placeholder="Email"
-              style={styles.input}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              style={styles.input}
             />
             <input
               type="password"
               placeholder="Пароль"
-              style={styles.input}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              style={styles.input}
             />
-            {isRegistering && (
-              <input
-                type="password"
-                placeholder="Підтвердити пароль"
-                style={styles.input}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            )}
-
             <button type="submit" style={styles.button}>
               {isRegistering ? "Зареєструватися" : "Увійти"}
             </button>
@@ -151,10 +130,9 @@ const AuthPage = () => {
           {!isRegistering && (
             <>
               <div style={styles.divider}></div>
-
-              <button style={styles.social} onClick={handleGoogleLogin}>
+              <button onClick={handleGoogleLogin} style={styles.social}>
                 <img
-                  src={"/assets/google-icon.png"}
+                  src="/assets/google-icon.png"
                   alt="Google"
                   style={styles.icon}
                 />
@@ -187,6 +165,7 @@ const AuthPage = () => {
 };
 
 export default AuthPage;
+
 const styles = {
   wrapper: {
     background: "#f4f4f4",
@@ -197,20 +176,31 @@ const styles = {
     alignItems: "center",
   },
   roleBox: {
-    textAlign: "center",
-    background: "white",
-    padding: "40px",
-    borderRadius: "10px",
-    boxShadow: "0 0 10px rgba(0,0,0,0.1)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "30px",
+  },
+  roleTitle: {
+    fontSize: "24px",
+    fontWeight: "bold",
+    color: "#333",
   },
   roleButtons: {
     display: "flex",
-    justifyContent: "center",
     gap: "20px",
-    marginTop: "20px",
+  },
+  roleButton: {
+    padding: "15px 30px",
+    border: "2px solid #648f5d",
+    backgroundColor: "#fff",
+    color: "#333",
+    fontWeight: "bold",
+    fontSize: "14px",
+    borderRadius: "8px",
+    cursor: "pointer",
   },
   container: {
-    width: "100%",
     maxWidth: "400px",
     backgroundColor: "white",
     padding: "30px",
@@ -233,17 +223,14 @@ const styles = {
     color: "white",
     border: "none",
     borderRadius: "25px",
-    marginBottom: "15px",
     fontWeight: "bold",
     cursor: "pointer",
-    fontSize: "15px",
   },
   switchMode: {
     color: "#648f5d",
     fontWeight: "bold",
     cursor: "pointer",
     marginTop: "10px",
-    fontSize: "14px",
   },
   divider: {
     height: "1px",
@@ -273,37 +260,5 @@ const styles = {
     color: "red",
     marginBottom: "10px",
     fontSize: "14px",
-  },
-  roleBox: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh",
-    backgroundColor: "#f4f4f4",
-    gap: "30px",
-  },
-
-  roleTitle: {
-    fontSize: "24px",
-    fontWeight: "bold",
-    color: "#333",
-  },
-
-  roleButtons: {
-    display: "flex",
-    gap: "20px",
-  },
-
-  roleButton: {
-    padding: "15px 30px",
-    border: "2px solid #648f5d",
-    backgroundColor: "#fff",
-    color: "#333",
-    fontWeight: "bold",
-    fontSize: "14px",
-    borderRadius: "8px",
-    cursor: "pointer",
-    transition: "0.3s",
   },
 };
