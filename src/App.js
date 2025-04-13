@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import AnimalCard from "./components/AnimalCard";
+import AnimalPage from "./pages/AnimalPage";
 import Shelter from "./pages/Shelter";
 import Search from "./pages/Search";
 import RequestForm from "./components/RequestForm";
@@ -28,7 +28,7 @@ function App() {
         <Route path="/request" element={<RequestForm />} />
         <Route path="/news" element={<News />} />
         <Route path="/volunteers" element={<Volunteers />} />
-        <Route path="/animal" element={<AnimalCard />} />
+        <Route path="/animal/:id" element={<AnimalPage />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/raffles" element={<Raffles />} />
         <Route path="/stories" element={<PetStories />} />

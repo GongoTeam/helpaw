@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AnimalCard from "../components/AnimalCard";
 import RequestForm from "../components/RequestForm";
 import animals from "../data/animals";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const [filters, setFilters] = useState({
@@ -9,7 +10,7 @@ const Search = () => {
     location: "",
     shelter: "",
   });
-
+  const navigate = useNavigate();
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
@@ -58,7 +59,7 @@ const Search = () => {
           onChange={handleFilterChange}
           style={styles.input}
         />
-        <button style={styles.button} onClick={() => setShowForm(true)}>
+        <button style={styles.button} onClick={() => navigate("/request")}>
           Залишити запит 📝
         </button>
       </div>
@@ -144,6 +145,7 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
     gap: "20px",
+    marginLeft: "530px",
   },
   modal: {
     position: "fixed",

@@ -1,63 +1,57 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
+const AnimalCard = ({ animal }) => {
+  return (
+    <div style={styles.card}>
+      <img src={animal.image} alt={animal.name} style={styles.image} />
+      <h2 style={styles.title}>{animal.name}</h2>
+      <p style={styles.description}>
+        {animal.description.length > 100
+          ? animal.description.slice(0, 100) + "..."
+          : animal.description}
+      </p>
+      <Link to={`/animal/${animal.id}`} style={styles.button}>
+        Детальніше →
+      </Link>
+    </div>
+  );
+};
 
 const styles = {
   card: {
     padding: "16px",
-    borderRadius: "16px",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-    backgroundColor: "#ffffff",
+    borderRadius: "10px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
   },
   image: {
     width: "100%",
-    height: "192px", // еквівалент h-48
+    height: "200px",
     objectFit: "cover",
-    borderRadius: "16px",
+    borderRadius: "10px",
   },
-  name: {
-    fontSize: "1.25rem",
-    fontWeight: "600",
-    marginTop: "8px",
+  title: {
+    fontSize: "20px",
+    margin: "10px 0 5px",
   },
   description: {
-    color: "#4B5563", // gray-600
-    marginTop: "4px",
-  },
-  actions: {
-    display: "flex",
-    justifyContent: "space-between",
-    marginTop: "16px",
+    color: "#555",
+    flexGrow: 1,
   },
   button: {
-    backgroundColor: "#22C55E", // green-500
-    color: "white",
-    padding: "8px 16px",
-    border: "none",
-    borderRadius: "9999px",
-    cursor: "pointer",
-    transition: "background-color 0.2s ease",
+    marginTop: "15px",
+    display: "inline-block",
+    padding: "10px 15px",
+    backgroundColor: "#A8D5BA",
+    color: "#fff",
+    textDecoration: "none",
+    borderRadius: "5px",
+    textAlign: "center",
   },
-};
-
-const AnimalCard = ({ animal, onClick }) => {
-  if (!animal) return null;
-
-  return (
-    <div style={styles.card}>
-      <img src={animal.image} alt={animal.name} style={styles.image} />
-      <h2 style={styles.name}>{animal.name}</h2>
-      <p style={styles.description}>{animal.description}</p>
-      <div style={styles.actions}>
-        <button
-          onClick={onClick}
-          style={styles.button}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#16A34A")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#22C55E")}
-        >
-          Детальніше
-        </button>
-      </div>
-    </div>
-  );
 };
 
 export default AnimalCard;
