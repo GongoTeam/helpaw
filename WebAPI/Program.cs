@@ -9,11 +9,31 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers & Swagger
+// Controllers, Swagger and SignalR
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "HelPaw API", Version = "v1" });
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "JWT Authorization header using the Bearer scheme",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme { Reference = new OpenApiReference {
+                Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 // DI
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -23,17 +43,34 @@ builder.Services.AddScoped<IShelterRequestService, ShelterRequestService>();
 builder.Services.AddScoped<IFavoriteAnimalService, FavoriteAnimalService>();
 builder.Services.AddScoped<IAnimalRequestService, AnimalRequestService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<IPetStoryService, PetStoryService>();
+builder.Services.AddScoped<IAnimalViewService, AnimalViewService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<INewsService, NewsService>();
+
+
 
 
 // DB
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    var env = builder.Configuration;
+    var host = env["AUTH_DB_HOST"];
+    var port = env["AUTH_DB_PORT"];
+    var db = env["AUTH_DB_NAME"];
+    var user = env["AUTH_DB_USER"];
+    var pass = env["AUTH_DB_PASS"];
+
+    var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={pass}";
+
+    options.UseNpgsql(connectionString);
+});
 
 // JWT Auth
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        var key = builder.Configuration["Jwt:Key"];
+        var key = builder.Configuration["JWT__KEY"];
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = false,
@@ -43,6 +80,18 @@ builder.Services.AddAuthentication("Bearer")
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!))
         };
     });
+
+// CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://your-frontend-url") // або "*", якщо тимчасово
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 var app = builder.Build();
 
@@ -54,12 +103,15 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 
-app.UseRouting(); // 👉 routing first
-app.UseAuthentication(); // 👉 auth middleware must be between routing and endpoints
+app.UseCors("AllowFrontend");
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
-// 👇 top-level route mapping
 app.MapControllers();
 app.MapHub<ChatHub>("/chatHub");
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://*:{port}");
 
 app.Run();

@@ -14,6 +14,12 @@ public class AppDbContext : DbContext
     public DbSet<AnimalRequest> AnimalRequests { get; set; } = null!;
     public DbSet<Message> Messages { get; set; } = null!;
     public DbSet<Chat> Chats { get; set; } = null!;
+    public DbSet<PetStory> PetStories { get; set; } = null!;
+    public DbSet<AnimalView> AnimalViews { get; set; } = null!;
+    public DbSet<Review> Reviews { get; set; } = null!;
+    public DbSet<News> News { get; set; } = null!;
+
+
 
 
 

@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using HelPaw.Application.Interfaces;
-using HelPaw.Application.DTOs;
+
 
 
 [ApiController]

@@ -1,4 +1,3 @@
-// WebAPI/Controllers/AnimalRequestController.cs
 using HelPaw.Application.DTOs;
 using HelPaw.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;

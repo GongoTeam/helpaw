@@ -3,15 +3,15 @@ namespace HelPaw.Application.DTOs.Animal;
 
 public class AnimalFilterDto
 {
-    public string? Type { get; set; }               // Dog, Cat і т.д.
-    public string? Gender { get; set; }             // Male, Female
-    public int? MinAge { get; set; }                // Мінімальний вік
-    public int? MaxAge { get; set; }                // Максимальний вік
-    public string? Size { get; set; }               // Small, Medium, Large
-    public string? Condition { get; set; }         // ✅ для фільтра
-    public bool? IsVaccinated { get; set; }        // ✅ нове
+    public string? Type { get; set; }              
+    public string? Gender { get; set; }            
+    public int? MinAge { get; set; }               
+    public int? MaxAge { get; set; }               
+    public string? Size { get; set; }              
+    public string? Condition { get; set; }         
+    public bool? IsVaccinated { get; set; }        
     public bool? IsSterilized { get; set; }  
-    public string? City { get; set; }               // Фільтр за містом
-    public bool? IsActive { get; set; }             // Активні/неактивні
-    public Guid? ShelterId { get; set; }            // Притулок
+    public string? City { get; set; }               
+    public bool? IsActive { get; set; }             
+    public Guid? ShelterId { get; set; }            
 }

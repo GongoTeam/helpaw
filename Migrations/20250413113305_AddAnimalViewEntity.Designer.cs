@@ -3,6 +3,7 @@ using System;
 using HelPaw.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HelPaw.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250413113305_AddAnimalViewEntity")]
+    partial class AddAnimalViewEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -209,36 +212,6 @@ namespace HelPaw.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("HelPaw.Domain.Entities.News", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AuthorId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuthorId");
-
-                    b.ToTable("News");
-                });
-
             modelBuilder.Entity("HelPaw.Domain.Entities.PetStory", b =>
                 {
                     b.Property<Guid>("Id")
@@ -266,36 +239,6 @@ namespace HelPaw.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("PetStories");
-                });
-
-            modelBuilder.Entity("HelPaw.Domain.Entities.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("ShelterId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("VolunteerId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShelterId");
-
-                    b.HasIndex("VolunteerId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("HelPaw.Domain.Entities.ShelterRequest", b =>
@@ -488,17 +431,6 @@ namespace HelPaw.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("HelPaw.Domain.Entities.News", b =>
-                {
-                    b.HasOne("HelPaw.Domain.Entities.User", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-                });
-
             modelBuilder.Entity("HelPaw.Domain.Entities.PetStory", b =>
                 {
                     b.HasOne("HelPaw.Domain.Entities.User", "User")
@@ -508,25 +440,6 @@ namespace HelPaw.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("HelPaw.Domain.Entities.Review", b =>
-                {
-                    b.HasOne("HelPaw.Domain.Entities.User", "Shelter")
-                        .WithMany()
-                        .HasForeignKey("ShelterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HelPaw.Domain.Entities.User", "Volunteer")
-                        .WithMany()
-                        .HasForeignKey("VolunteerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Shelter");
-
-                    b.Navigation("Volunteer");
                 });
 
             modelBuilder.Entity("HelPaw.Domain.Entities.ShelterRequest", b =>

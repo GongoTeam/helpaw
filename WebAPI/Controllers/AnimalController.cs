@@ -70,5 +70,26 @@ public class AnimalController : ControllerBase
         var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         return Guid.Parse(idClaim ?? throw new Exception("User ID not found"));
     }
+    [HttpPost("{id}/view")]
+    public async Task<IActionResult> RecordView(Guid id, [FromServices] IAnimalViewService viewService)
+    {
+        Guid? userId = null;
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (Guid.TryParse(claim, out var parsedId))
+                userId = parsedId;
+        }
 
+        await viewService.RecordViewAsync(id, userId);
+        return Ok();
+    }
+    [HttpGet("{id}/views")]
+    public async Task<IActionResult> GetViews(Guid id, [FromServices] IAnimalViewService viewService)
+    {
+        var total = await viewService.GetTotalViewsAsync(id);
+        var unique = await viewService.GetUniqueUserViewsAsync(id);
+
+        return Ok(new { total, unique });
+    }
 }

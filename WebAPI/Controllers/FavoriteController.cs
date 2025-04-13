@@ -1,4 +1,3 @@
-// WebAPI/Controllers/FavoriteController.cs
 using HelPaw.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
