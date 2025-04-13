@@ -10,9 +10,9 @@ const Search = () => {
     location: "",
     shelter: "",
   });
-  const navigate = useNavigate();
   const [selectedAnimal, setSelectedAnimal] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const navigate = useNavigate();
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +30,8 @@ const Search = () => {
         check(animal.shelter, filters.shelter),
     );
   };
+
+  const filteredAnimals = applyFilters();
 
   return (
     <div style={styles.container}>
@@ -59,13 +61,19 @@ const Search = () => {
           onChange={handleFilterChange}
           style={styles.input}
         />
-        <button style={styles.button} onClick={() => navigate("/request")}>
+        <button style={styles.button} onClick={() => setShowForm(true)}>
           Залишити запит 📝
         </button>
       </div>
 
-      <div style={styles.grid}>
-        {applyFilters().map((animal) => (
+      <div
+        className="grid"
+        style={{
+          ...styles.grid,
+          justifyContent: filteredAnimals.length < 3 ? "center" : "start",
+        }}
+      >
+        {filteredAnimals.map((animal) => (
           <AnimalCard
             key={animal.id}
             animal={animal}
@@ -107,6 +115,15 @@ const Search = () => {
           </div>
         </div>
       )}
+
+      {/* Медіа-запит для mobile grid */}
+      <style>{`
+        @media (max-width: 768px) {
+          .grid {
+            margin-left: 0 !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };
@@ -145,7 +162,7 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
     gap: "20px",
-    marginLeft: "530px",
+    marginLeft: "530px", // буде перекрито медіа-запитом на мобілках
   },
   modal: {
     position: "fixed",

@@ -87,6 +87,7 @@ const ShelterRatings = () => {
       justifyContent: "space-between",
       alignItems: "center",
       flexWrap: "wrap",
+      position: "relative",
     },
     headerRow: {
       display: "flex",
@@ -104,9 +105,10 @@ const ShelterRatings = () => {
       background: "none",
       border: "none",
       color: "white",
+      marginLeft: "200px",
       fontSize: "28px",
       cursor: "pointer",
-      marginLeft: "165px",
+      display: "none",
     },
     nav: {
       display: "flex",
@@ -114,6 +116,18 @@ const ShelterRatings = () => {
       marginRight: "40px",
       flexWrap: "wrap",
       alignItems: "center",
+    },
+    mobileNav: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "20px",
+      position: "absolute",
+      top: "70px",
+      right: "-40px",
+      backgroundColor: "rgba(30, 30, 30, 0.95)",
+      padding: "20px",
+      zIndex: 999,
+      width: "100%",
     },
     navLink: {
       color: "white",
@@ -157,6 +171,7 @@ const ShelterRatings = () => {
       padding: "1rem",
       marginBottom: "1rem",
       boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+      flexWrap: "wrap",
     },
     cardLeft: {
       display: "flex",
@@ -194,10 +209,8 @@ const ShelterRatings = () => {
               ☰
             </button>
           </div>
-          <nav
-            style={styles.nav}
-            className={menuOpen ? "nav" : "nav navClosed"}
-          >
+
+          <nav style={styles.nav} className="desktopNav">
             <a href="/" style={styles.navLink}>
               Головна
             </a>
@@ -213,44 +226,85 @@ const ShelterRatings = () => {
             <a href="/volunteers" style={styles.navLink}>
               Волонтерам
             </a>
-            <a href="Auth" style={styles.navLink}>
+            <a href="/auth" style={styles.navLink}>
               Вхід/Реєстрація
             </a>
           </nav>
+
+          {menuOpen && (
+            <nav style={styles.mobileNav} className="mobileNav">
+              <a
+                href="/"
+                style={styles.navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                Головна
+              </a>
+              <a
+                href="/news"
+                style={styles.navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                Новини/блог
+              </a>
+              <a
+                href="/search"
+                style={styles.navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                Тварини
+              </a>
+              <a
+                href="/shelters"
+                style={styles.navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                Притулки
+              </a>
+              <a
+                href="/volunteers"
+                style={styles.navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                Волонтерам
+              </a>
+              <a
+                href="/auth"
+                style={styles.navLink}
+                onClick={() => setMenuOpen(false)}
+              >
+                Вхід/Реєстрація
+              </a>
+            </nav>
+          )}
         </header>
+
         <style>{`
           @media (max-width: 768px) {
             .burger {
-              display: block;
+              display: block !important;
             }
-            .nav {
-              flex-direction: column;
-              align-items: flex-start;
-              width: 100%;
-              margin-top: 10px;
-              gap: 10px;
-            }
-            .navClosed {
+
+            .desktopNav {
               display: none !important;
             }
           }
 
           @media (min-width: 769px) {
+            .mobileNav {
+              display: none !important;
+            }
+
             .burger {
-              display: none;
+              display: none !important;
             }
-            .nav {
-              display: flex !important;
-              flex-direction: row;
-              align-items: center;
-              gap: 20px;
-              margin-top: 0;
-            }
-            .navClosed {
+
+            .desktopNav {
               display: flex !important;
             }
           }
         `}</style>
+
         <section style={styles.section}>
           <div style={styles.searchBar}>
             <input
@@ -288,7 +342,6 @@ const ShelterRatings = () => {
             </div>
           </div>
 
-          {/* Рекомендовані притулки */}
           <h2>Рекомендовані притулки</h2>
           {shelters.filter((s) => s.recommended).length > 0 ? (
             shelters

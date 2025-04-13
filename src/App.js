@@ -14,6 +14,7 @@ import ShelterRatings from "./pages/ShelterRatings";
 import PetStories from "./pages/PetStories";
 import AuthPage from "./pages/AuthPage";
 import Volunteers from "./pages/Volunteers";
+import EditProfile from "./pages/EditProfile";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/shelters" element={<ShelterRatings />} />
         <Route path="/shelter/:id" element={<Shelter />} />

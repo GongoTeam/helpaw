@@ -27,10 +27,10 @@ const AuthPage = () => {
     if (!validateEmail(email)) return setError("Невірний формат email");
     if (password.length < 6) return setError("Мінімум 6 символів у паролі");
 
-    if (isRegistering) {
-      if (!role) return setError("Оберіть роль");
+    try {
+      if (isRegistering) {
+        if (!role) return setError("Оберіть роль");
 
-      try {
         await createUserWithEmailAndPassword(auth, email, password);
 
         await axios.post("http://localhost:5001/api/auth/register", {
@@ -39,40 +39,54 @@ const AuthPage = () => {
           role,
         });
 
-        // Після реєстрації — перехід до форми входу
         setIsRegistering(false);
         setShowRoleSelect(false);
         setEmail("");
         setPassword("");
-      } catch (err) {
-        setError(err.response?.data?.message || err.message);
+        return setError("Реєстрація успішна. Увійдіть.");
       }
-    } else {
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
 
-        const res = await axios.post("http://localhost:5001/api/auth/login", {
-          email,
-          password,
-        });
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
 
-        localStorage.setItem("token", res.data.token);
+      const res = await axios.post("http://localhost:5001/api/auth/login", {
+        email,
+        password,
+      });
 
-        // Після входу — перехід на профіль
-        navigate("/profile");
-      } catch (err) {
-        setError(err.response?.data?.message || err.message);
-      }
+      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
+      navigate("/profile");
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
     }
   };
 
   const handleGoogleLogin = async () => {
+    setError("");
+    if (!role) {
+      return setError("Оберіть роль перед входом через Google");
+    }
+
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      console.log("Google user:", result.user);
+      const googleEmail = result.user.email;
+
+      const res = await axios.post(
+        "http://localhost:5001/api/auth/google-login",
+        {
+          email: googleEmail,
+          role,
+        },
+      );
+
+      localStorage.setItem("token", res.data.token);
       navigate("/profile");
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
     }
   };
 
