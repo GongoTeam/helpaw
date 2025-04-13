@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-
+import AnimalCard from "./components/AnimalCard";
 import Shelter from "./pages/Shelter";
 import Search from "./pages/Search";
-import RequestForm from "./pages/RequestForm";
+import RequestForm from "./components/RequestForm";
 import News from "./pages/News";
 import Donate from "./pages/Donate";
 import Raffles from "./pages/Raffles";
@@ -28,6 +28,7 @@ function App() {
         <Route path="/request" element={<RequestForm />} />
         <Route path="/news" element={<News />} />
         <Route path="/volunteers" element={<Volunteers />} />
+        <Route path="/animal" element={<AnimalCard />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/raffles" element={<Raffles />} />
         <Route path="/stories" element={<PetStories />} />

@@ -1,0 +1,31 @@
+const animals = [
+  {
+    id: 1,
+    name: "Сімба",
+    age: "3 місяці",
+    gender: "хлопчик",
+    trait: "любить гратися",
+    image: "/assets/animal1.png",
+    description: "Малюк дуже активний і грайливий, любить увагу та обійми.",
+  },
+  {
+    id: 2,
+    name: "Мія",
+    age: "1 рік",
+    gender: "дівчинка",
+    trait: "лагідна, довірлива",
+    image: "/assets/animal2.png",
+    description: "Мія дуже лагідна та любить тихо проводити час.",
+  },
+  {
+    id: 3,
+    name: "Тайсон",
+    age: "2 роки",
+    gender: "хлопчик",
+    trait: "розумний",
+    image: "/assets/animal1.png",
+    description: "Знає команди, дуже слухняний і прив’язується до людини.",
+  },
+];
+
+export default animals;
