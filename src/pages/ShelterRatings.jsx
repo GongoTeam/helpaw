@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const ShelterRatings = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -7,6 +8,17 @@ const ShelterRatings = () => {
   const [category, setCategory] = useState("");
   const [sortRating, setSortRating] = useState("");
   const [hasRequestsOnly, setHasRequestsOnly] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleAuthClick = () => {
+    navigate(isAuthenticated ? "/profile" : "/auth");
+  };
 
   const shelters = [
     {
@@ -117,6 +129,13 @@ const ShelterRatings = () => {
       flexWrap: "wrap",
       alignItems: "center",
     },
+    navLink2: {
+      backgroundColor: "transparent",
+      color: "#fff",
+      border: "none",
+      outline: "none",
+      fontSize: "15px",
+    },
     mobileNav: {
       display: "flex",
       flexDirection: "column",
@@ -209,8 +228,10 @@ const ShelterRatings = () => {
               ☰
             </button>
           </div>
-
-          <nav style={styles.nav} className="desktopNav">
+          <nav
+            style={styles.nav}
+            className={menuOpen ? "nav" : "nav navClosed"}
+          >
             <a href="/" style={styles.navLink}>
               Головна
             </a>
@@ -226,57 +247,10 @@ const ShelterRatings = () => {
             <a href="/volunteers" style={styles.navLink}>
               Волонтерам
             </a>
-            <a href="/auth" style={styles.navLink}>
-              Вхід/Реєстрація
-            </a>
+            <button onClick={handleAuthClick} style={styles.navLink2}>
+              {isAuthenticated ? "Профіль" : "Вхід/Реєстрація"}
+            </button>
           </nav>
-
-          {menuOpen && (
-            <nav style={styles.mobileNav} className="mobileNav">
-              <a
-                href="/"
-                style={styles.navLink}
-                onClick={() => setMenuOpen(false)}
-              >
-                Головна
-              </a>
-              <a
-                href="/news"
-                style={styles.navLink}
-                onClick={() => setMenuOpen(false)}
-              >
-                Новини/блог
-              </a>
-              <a
-                href="/search"
-                style={styles.navLink}
-                onClick={() => setMenuOpen(false)}
-              >
-                Тварини
-              </a>
-              <a
-                href="/shelters"
-                style={styles.navLink}
-                onClick={() => setMenuOpen(false)}
-              >
-                Притулки
-              </a>
-              <a
-                href="/volunteers"
-                style={styles.navLink}
-                onClick={() => setMenuOpen(false)}
-              >
-                Волонтерам
-              </a>
-              <a
-                href="/auth"
-                style={styles.navLink}
-                onClick={() => setMenuOpen(false)}
-              >
-                Вхід/Реєстрація
-              </a>
-            </nav>
-          )}
         </header>
 
         <style>{`

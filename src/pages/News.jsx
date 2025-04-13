@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Footer from "../components/Footer";
-
+import { useNavigate } from "react-router-dom";
 const styles = {
   container: {
     fontFamily: "'PT Sans', sans-serif",
@@ -37,6 +37,13 @@ const styles = {
     marginRight: "30px",
     flexWrap: "wrap",
     alignItems: "center",
+  },
+  navLink2: {
+    backgroundColor: "transparent",
+    color: "#fff",
+    border: "none",
+    outline: "none",
+    fontSize: "15px",
   },
   navLink: {
     color: "white",
@@ -188,9 +195,17 @@ const styles = {
 const News = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const blogRef = useRef(null);
   const [formSent, setFormSent] = useState(false);
-
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+  const navigate = useNavigate();
+  const handleAuthClick = () => {
+    navigate(isAuthenticated ? "/profile" : "/auth");
+  };
   const handleSubmit = () => {
     setFormSent(true);
     setTimeout(() => {
@@ -206,38 +221,16 @@ const News = () => {
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.logoText}>HelPaw</h1>
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={styles.burger}
-          className="burger"
-        >
-          ☰
-        </button>
-        <style>{`
-          @media (max-width: 768px) {
-            .burger { display: block; }
-            .nav {
-              flex-direction: column;
-              align-items: flex-start;
-              width: 100%;
-              gap: 10px;
-              margin-top: 10px;
-              padding-left: 10px;
-            }
-            .navClosed { display: none !important; }
-          }
-          @media (min-width: 769px) {
-            .burger { display: none; }
-            .nav {
-              display: flex !important;
-              flex-direction: row;
-              align-items: center;
-              gap: 20px;
-            }
-            .navClosed { display: flex !important; }
-          }
-        `}</style>
+        <div style={styles.headerRow}>
+          <h1 style={styles.logoText}>HelPaw</h1>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={styles.burger}
+            className="burger"
+          >
+            ☰
+          </button>
+        </div>
         <nav style={styles.nav} className={menuOpen ? "nav" : "nav navClosed"}>
           <a href="/" style={styles.navLink}>
             Головна
@@ -254,9 +247,9 @@ const News = () => {
           <a href="/volunteers" style={styles.navLink}>
             Волонтерам
           </a>
-          <a href="/auth" style={styles.navLink}>
-            Вхід/Реєстрація
-          </a>
+          <button onClick={handleAuthClick} style={styles.navLink2}>
+            {isAuthenticated ? "Профіль" : "Вхід/Реєстрація"}
+          </button>
         </nav>
       </header>
 
@@ -353,7 +346,39 @@ const News = () => {
           </div>
         </div>
       )}
+      <style>{`
+        @media (max-width: 768px) {
+          .burger {
+            display: block;
+          }
+          .nav {
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            margin-top: 10px;
+            gap: 10px;
+          }
+          .navClosed {
+            display: none !important;
+          }
+        }
 
+        @media (min-width: 769px) {
+          .burger {
+            display: none;
+          }
+          .nav {
+            display: flex !important;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+            margin-top: 0;
+          }
+          .navClosed {
+            display: flex !important;
+          }
+        }
+      `}</style>
       <Footer />
     </div>
   );

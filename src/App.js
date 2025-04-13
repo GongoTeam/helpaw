@@ -15,6 +15,7 @@ import PetStories from "./pages/PetStories";
 import AuthPage from "./pages/AuthPage";
 import Volunteers from "./pages/Volunteers";
 import EditProfile from "./pages/EditProfile";
+import UserActivity from "./pages/UserActivity";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/volunteers" element={<Volunteers />} />
         <Route path="/animal/:id" element={<AnimalPage />} />
+        <Route path="/activity" element={<UserActivity />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/raffles" element={<Raffles />} />
         <Route path="/stories" element={<PetStories />} />

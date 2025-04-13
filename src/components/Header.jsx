@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const handleAuthClick = () => {
+    navigate(isAuthenticated ? "/profile" : "/auth");
+  };
 
   return (
     <div style={styles.page}>
@@ -34,9 +44,9 @@ export default function Header() {
           <a href="/volunteers" style={styles.navLink}>
             Волонтерам
           </a>
-          <a href="Auth" style={styles.navLink}>
-            Вхід/Реєстрація
-          </a>
+          <button onClick={handleAuthClick} style={styles.navLink}>
+            {isAuthenticated ? "Профіль" : "Вхід/Реєстрація"}
+          </button>
         </nav>
       </header>
 
@@ -151,6 +161,10 @@ const styles = {
     color: "white",
     textDecoration: "none",
     fontSize: "16px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    fontFamily: "inherit",
   },
   main: {
     flexGrow: 1,

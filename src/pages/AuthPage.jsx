@@ -59,7 +59,7 @@ const AuthPage = () => {
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
-      navigate("/profile");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     }
@@ -84,7 +84,7 @@ const AuthPage = () => {
       );
 
       localStorage.setItem("token", res.data.token);
-      navigate("/profile");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     }
